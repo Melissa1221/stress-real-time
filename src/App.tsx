@@ -8,6 +8,7 @@ import WelcomeQuestionnaire from './pages/WelcomeQuestionnaire';
 import History from './pages/History';
 import Form from './pages/Form';
 import Results from './pages/Results';
+import Questionnaire2 from './pages/Questionnaire2';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path={ROUTES.HISTORY} element={<History />} />
         <Route path={ROUTES.FORM} element={<Form />} />
         <Route path={ROUTES.RESULTS} element={<Results />} />
+        <Route path={ROUTES.QUESTIONNAIRE2} element={<Questionnaire2 />} />
       </Routes>
     </BrowserRouter>
   );

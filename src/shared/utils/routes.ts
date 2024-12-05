@@ -6,7 +6,9 @@ export const ROUTES = {
   WELCOME_QUESTIONNAIRE: '/welcome-questionnaire',
   HISTORY: '/history',
   FORM: '/form',
-  RESULTS: '/results'
+  FORM_2: '/form-2',
+  RESULTS: '/results',
+  QUESTIONNAIRE2: '/questionnaire2'
 } as const;
 
 // Type for route keys

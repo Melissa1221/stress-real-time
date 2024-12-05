@@ -6,6 +6,7 @@ import { ROUTES } from '../shared/utils/routes';
 const Results = () => {
   // Get the stress percentage from localStorage
   const stressPercentage = localStorage.getItem('questionnaireStress') || '0';
+  const stressPercentage2 = localStorage.getItem('questionnaireStress2') || '0';
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -21,10 +22,10 @@ const Results = () => {
             </p>
           </div>
 
-          {/* Questionnaire Results */}
+          {/* First Questionnaire Results */}
           <div className="flex flex-col gap-2">
             <h2 className="text-xl font-medium text-center">
-              Resultado del Cuestionario
+              Cuestionario de Estrés Académico
             </h2>
             <div className="text-center text-gray-700">
               Porcentaje de estrés: {stressPercentage}%
@@ -33,6 +34,22 @@ const Results = () => {
               <div
                 className="bg-success-500 h-2.5 rounded-full transition-all duration-300"
                 style={{ width: `${stressPercentage}%` }}
+              />
+            </div>
+          </div>
+
+          {/* Second Questionnaire Results */}
+          <div className="flex flex-col gap-2">
+            <h2 className="text-xl font-medium text-center">
+              Escala de Estrés Percibido
+            </h2>
+            <div className="text-center text-gray-700">
+              Porcentaje de estrés: {stressPercentage2}%
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2.5">
+              <div
+                className="bg-info-500 h-2.5 rounded-full transition-all duration-300"
+                style={{ width: `${stressPercentage2}%` }}
               />
             </div>
           </div>
