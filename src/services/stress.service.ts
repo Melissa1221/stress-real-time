@@ -1,4 +1,5 @@
 import { API_URL } from '../config/env';
+import { NavigationService } from './navigation.service';
 
 interface StressAnalysis {
   stress_percentage: number;
@@ -29,7 +30,7 @@ export class StressService {
 
       if (response.status === 401) {
         localStorage.removeItem('user');
-        window.location.href = '/';
+        NavigationService.navigateToLogin();
         return {
           success: false,
           error: 'Sesión expirada. Por favor, inicia sesión nuevamente.'

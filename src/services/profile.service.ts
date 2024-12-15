@@ -1,4 +1,5 @@
 import { API_URL } from '../config/env';
+import { NavigationService } from './navigation.service';
 
 interface ProfileData {
   full_name: string;
@@ -30,7 +31,7 @@ export class ProfileService {
       if (response.status === 401) {
         // Token expirado o inválido
         localStorage.removeItem('user'); // Limpiar sesión
-        window.location.href = '/'; // Redirigir al login
+        NavigationService.navigateToLogin();
         return {
           success: false,
           error: 'Sesión expirada. Por favor, inicia sesión nuevamente.'

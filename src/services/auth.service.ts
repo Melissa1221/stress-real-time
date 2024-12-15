@@ -1,3 +1,5 @@
+import { API_URL } from "../config/env";
+
 declare const gapi: {
   load: (api: string, callback: () => void) => void;
   auth2: {
@@ -34,7 +36,6 @@ interface AuthResponse {
   error?: string;
 }
 
-import { API_URL } from '../config/env';
 
 // interface LoginFormData {
 //   grant_type?: string;

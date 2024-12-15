@@ -1,4 +1,5 @@
 import { API_URL } from '../config/env';
+import { NavigationService } from './navigation.service';
 
 interface QuestionnaireResponse {
   success: boolean;
@@ -50,7 +51,7 @@ export class QuestionnaireService {
 
       if (response.status === 401) {
         localStorage.removeItem('user');
-        window.location.href = '/';
+        NavigationService.navigateToLogin();
         return {
           success: false,
           error: 'Sesión expirada. Por favor, inicia sesión nuevamente.'
