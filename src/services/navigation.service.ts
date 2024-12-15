@@ -1,11 +1,17 @@
 import { ROUTES } from '../shared/utils/routes';
 
 export class NavigationService {
+  private static getBaseUrl() {
+    return window.location.origin;
+  }
+
   static navigateToLogin() {
-    window.location.replace(ROUTES.LOGIN);
+    const baseUrl = this.getBaseUrl();
+    window.location.replace(`${baseUrl}${ROUTES.LOGIN}`);
   }
 
   static navigateToRoute(route: string) {
-    window.location.replace(route);
+    const baseUrl = this.getBaseUrl();
+    window.location.replace(`${baseUrl}${route}`);
   }
 } 
