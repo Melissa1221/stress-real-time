@@ -1,4 +1,3 @@
-import React from 'react';
 import { ROUTES } from '../shared/utils/routes';
 import Card from '../components/Card';
 import Button from '../components/Button';
