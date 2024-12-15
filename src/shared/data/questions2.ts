@@ -72,3 +72,4 @@ export const calculateStressPercentage2 = (answers: string[]): number => {
   // PSS-10 scores range from 0-40, convert to percentage
   return Math.round((totalScore / 40) * 100);
 }; 
+

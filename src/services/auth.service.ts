@@ -29,8 +29,26 @@ interface AuthResponse {
   user?: {
     name: string;
     email: string;
+    token?: string;
   };
   error?: string;
+}
+
+import { API_URL } from '../config/env';
+
+// interface LoginFormData {
+//   grant_type?: string;
+//   username: string;
+//   password: string;
+//   scope?: string;
+//   client_id?: string;
+//   client_secret?: string;
+// }
+
+interface RegisterFormData {
+  username: string;
+  email: string;
+  password: string;
 }
 
 export class AuthService {
@@ -140,25 +158,156 @@ export class AuthService {
 
   static async emailSignIn(email: string, password: string): Promise<AuthResponse> {
     try {
-      // Here you would typically make an API call to your backend
-      // For now, we'll just simulate a successful login
-      if (email && password) {
+      const formData = {
+        username: email,
+        password,
+        grant_type: 'password'
+      } as Record<string, string>;
+
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
         return {
-          success: true,
-          user: {
-            name: email.split('@')[0],
-            email
-          }
+          success: false,
+          error: data.detail || 'Error al iniciar sesión. Verifica tus credenciales.'
         };
       }
+
       return {
-        success: false,
-        error: "Por favor, completa todos los campos."
+        success: true,
+        user: {
+          name: email.split('@')[0],
+          email,
+          token: data.access_token
+        }
       };
-    } catch {
+    } catch (error) {
+      console.error('Error during login:', error);
       return {
         success: false,
-        error: "Error al iniciar sesión. Verifica tus credenciales."
+        error: "Error al conectar con el servidor. Intenta nuevamente."
+      };
+    }
+  }
+
+  static async emailRegister(email: string, password: string): Promise<AuthResponse> {
+    try {
+      const registerData: RegisterFormData = {
+        username: email.split('@')[0],
+        email,
+        password,
+      };
+
+      const response = await fetch(`${API_URL}/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(registerData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return {
+          success: false,
+          error: data.detail || 'Error al registrar. Verifica los datos ingresados.'
+        };
+      }
+
+      return {
+        success: true,
+        user: {
+          name: email.split('@')[0],
+          email,
+          token: data.access_token
+        }
+      };
+    } catch (error) {
+      console.error('Error during registration:', error);
+      return {
+        success: false,
+        error: "Error al conectar con el servidor. Intenta nuevamente."
+      };
+    }
+  }
+
+  static async socialAuth(provider: 'google' | 'facebook', token: string): Promise<AuthResponse> {
+    try {
+      const response = await fetch(`${API_URL}/auth/${provider}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return {
+          success: false,
+          error: data.message || `Error al autenticar con ${provider}.`
+        };
+      }
+
+      return {
+        success: true,
+        user: {
+          name: data.user.name,
+          email: data.user.email,
+          token: data.token
+        }
+      };
+    } catch (error) {
+      console.error(`Error during ${provider} auth:`, error);
+      return {
+        success: false,
+        error: "Error al conectar con el servidor. Intenta nuevamente."
+      };
+    }
+  }
+
+  static async register(data: RegisterFormData): Promise<AuthResponse> {
+    try {
+      const response = await fetch(`${API_URL}/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        return {
+          success: false,
+          error: result.detail || 'Error al registrar. Verifica los datos ingresados.'
+        };
+      }
+
+      return {
+        success: true,
+        user: {
+          name: data.username,
+          email: data.email,
+          token: result.access_token
+        }
+      };
+    } catch (error) {
+      console.error('Error during registration:', error);
+      return {
+        success: false,
+        error: "Error al conectar con el servidor. Intenta nuevamente."
       };
     }
   }

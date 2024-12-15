@@ -14,7 +14,8 @@ interface CardQuestionProps {
   progress: number;
   selectedOption?: string;
   onOptionSelect: (optionId: string) => void;
-  onNext: () => void;
+  onNext: (() => void) | (() => Promise<void>);
+  error?: string;
 }
 
 const CardQuestion: React.FC<CardQuestionProps> = ({

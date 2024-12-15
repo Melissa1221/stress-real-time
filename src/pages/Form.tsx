@@ -3,6 +3,8 @@ import Card from '../components/Card';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { ROUTES } from '../shared/utils/routes';
+import { ProfileService } from '../services/profile.service';
+import { useNavigate } from 'react-router-dom';
 
 interface FormData {
   fullName: string;
@@ -20,11 +22,54 @@ const Form = () => {
     civilStatus: '',
     occupation: '',
   });
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log(formData);
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const userStr = localStorage.getItem('user');
+      if (!userStr) {
+        setError('Sesión no válida');
+        navigate(ROUTES.LOGIN);
+        return;
+      }
+
+      const user = JSON.parse(userStr);
+      if (!user.token) {
+        setError('Token no encontrado');
+        navigate(ROUTES.LOGIN);
+        return;
+      }
+
+      const profileData = {
+        full_name: formData.fullName,
+        age: parseInt(formData.age),
+        gender: formData.gender,
+        marital_status: formData.civilStatus,
+        occupation: formData.occupation
+      };
+
+      const response = await ProfileService.saveProfile(profileData, user.token);
+      
+      if (response.success) {
+        navigate(ROUTES.WELCOME);
+      } else {
+        if (response.error?.includes('Sesión expirada')) {
+          navigate(ROUTES.LOGIN);
+        } else {
+          setError(response.error || 'Error al guardar el perfil');
+        }
+      }
+    } catch {
+      setError('Error al procesar la solicitud');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -45,6 +90,12 @@ const Form = () => {
               Completa tu perfil
             </h1>
           </div>
+
+          {error && (
+            <div className="bg-primary-50 text-primary-500 p-3 rounded-md text-sm">
+              {error}
+            </div>
+          )}
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -125,12 +176,12 @@ const Form = () => {
             />
 
             <div className="mt-2">
-                <Button
-                    text="Guardar Perfil"
-                    color="success"
-                    type="submit"
-                    route={ROUTES.WELCOME}
-                />
+              <Button
+                text={isLoading ? "Guardando..." : "Guardar Perfil"}
+                color="success"
+                type="submit"
+                disabled={isLoading}
+              />
             </div>
           </form>
         </div>

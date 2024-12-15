@@ -47,3 +47,4 @@ export const calculateStressPercentage = (answers: string[]): number => {
   const maxScore = questions.length * 4; // 4 is max points per question
   return Math.round((totalScore / maxScore) * 100);
 }; 
+

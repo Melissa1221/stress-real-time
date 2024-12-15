@@ -51,7 +51,7 @@ const WelcomeQuestionnaire = () => {
               <Button
                 text="Comenzar Cuestionario"
                 color="success"
-                route={ROUTES.QUESTIONNAIRE}
+                route={ROUTES.QUESTIONNAIRE2}
                 disabled={!sensorsActivated || !cameraActivated}
               />
             </div>
