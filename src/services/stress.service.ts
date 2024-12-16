@@ -1,9 +1,13 @@
 import { API_URL } from '../config/env';
 import { NavigationService } from './navigation.service';
+import { STRESS_LEVELS, StressLevel } from '../shared/constants/stress-levels';
 
 interface StressAnalysis {
   stress_percentage: number;
   description: string;
+  state: string;
+  suggestion: string;
+  consequences: string;
 }
 
 interface StressResponse {
@@ -13,6 +17,12 @@ interface StressResponse {
 }
 
 export class StressService {
+  static getStressLevel(percentage: number): StressLevel {
+    return STRESS_LEVELS.find(
+      level => percentage >= level.range[0] && percentage <= level.range[1]
+    ) || STRESS_LEVELS[STRESS_LEVELS.length - 1];
+  }
+
   static async getAnalysis(token: string): Promise<StressResponse> {
     try {
       if (!token) {
@@ -46,9 +56,17 @@ export class StressService {
         };
       }
 
+      const stressLevel = this.getStressLevel(data.stress_percentage);
+      
       return {
         success: true,
-        data
+        data: {
+          stress_percentage: data.stress_percentage,
+          state: stressLevel.state,
+          description: stressLevel.description,
+          suggestion: stressLevel.suggestion,
+          consequences: stressLevel.consequences
+        }
       };
     } catch (error) {
       console.error('Error getting stress analysis:', error);

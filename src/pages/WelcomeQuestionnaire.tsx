@@ -1,21 +1,21 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import { ROUTES } from '../shared/utils/routes';
 import Card from '../components/Card';
 import Button from '../components/Button';
 
 const WelcomeQuestionnaire = () => {
-  const [sensorsActivated, setSensorsActivated] = useState(false);
-  const [cameraActivated, setCameraActivated] = useState(false);
+  // const [sensorsActivated, setSensorsActivated] = useState(false);
+  // const [cameraActivated, setCameraActivated] = useState(false);
 
-  const handleActivateSensors = () => {
-    // Handle sensors activation logic here
-    setSensorsActivated(true);
-  };
+  // const handleActivateSensors = () => {
+  //   // Handle sensors activation logic here
+  //   setSensorsActivated(true);
+  // };
 
-  const handleActivateCamera = () => {
-    // Handle camera activation logic here
-    setCameraActivated(true);
-  };
+  // const handleActivateCamera = () => {
+  //   // Handle camera activation logic here
+  //   setCameraActivated(true);
+  // };
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -33,7 +33,7 @@ const WelcomeQuestionnaire = () => {
 
           {/* Action Buttons */}
           <div className="flex flex-col gap-3">
-            <Button
+            {/* <Button
               text="Activar Sensores"
               color="success"
               onClick={handleActivateSensors}
@@ -45,14 +45,14 @@ const WelcomeQuestionnaire = () => {
               color="info"
               onClick={handleActivateCamera}
               disabled={cameraActivated}
-            />
+            /> */}
 
             <div className="mt-4">
               <Button
                 text="Comenzar Cuestionario"
                 color="success"
                 route={ROUTES.QUESTIONNAIRE2}
-                disabled={!sensorsActivated || !cameraActivated}
+                // disabled={!sensorsActivated || !cameraActivated}
               />
             </div>
           </div>
